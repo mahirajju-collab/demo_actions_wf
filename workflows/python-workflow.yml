@@ -1,0 +1,34 @@
+name: PR Check
+
+on:
+  push:
+    branches:
+      - branch_* # Or the branch you want to monitor for pushes
+  pull_request:
+    branches:
+      - main # Or the branch your pull requests target
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9' # Specify your desired Python version
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt # If you have a requirements.txt file
+
+    - name: Print Hello World
+      run: echo "Hello World from GitHub Actions!" 
+
+    #- name: Run Python script
+     # run: python your_script.py # Replace 'your_script.py' with your actual script name
+
+    #- name: Run Python tests (optional)
+    # run: pytest # If you use pytest for testing
