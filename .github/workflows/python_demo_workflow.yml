@@ -1,12 +1,6 @@
-name: PR Check
+name: Python PR check
 
-on:
-  push:
-    branches:
-      - branch_* # Or the branch you want to monitor for pushes
-  pull_request:
-    branches:
-      - main # Or the branch your pull requests target
+on: [push, pull_request]
 
 jobs:
   build:
