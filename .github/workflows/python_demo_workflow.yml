@@ -26,3 +26,17 @@ jobs:
 
     #- name: Run Python tests (optional)
     # run: pytest # If you use pytest for testing
+
+    - name: Install Black
+      run: pip install black
+
+    - name: Run Black on src directory
+      run: black src/ # This will format all Python files within the src directory
+
+    - name: Create Pull Request with formatted changes (optional)
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+          commit_message: "Format Python code with Black"
+          branch: ${{ github.head_ref }} # Use the head branch for pull requests
+          push_options: "--force" # Use with caution, ensures changes are pushed
+          if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository # Only run on PRs from the same repo
