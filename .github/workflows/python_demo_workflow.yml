@@ -1,12 +1,6 @@
-name: PR Check
+name: Python PR check
 
-on:
-  push:
-    branches:
-      - branch_* # Or the branch you want to monitor for pushes
-  pull_request:
-    branches:
-      - main # Or the branch your pull requests target
+on: [push, pull_request]
 
 jobs:
   build:
@@ -43,3 +37,17 @@ jobs:
 
     #- name: Run Python tests (optional)
     # run: pytest # If you use pytest for testing
+
+    - name: Install Black
+      run: pip install black
+
+    - name: Run Black on src directory
+      run: black src/ # This will format all Python files within the src directory
+
+    - name: Create Pull Request with formatted changes (optional)
+      if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "chore: format Python code with Black"
+        branch: ${{ github.head_ref }}
+        push_options: "--force-with-lease"
