@@ -34,9 +34,9 @@ jobs:
       run: black src/ # This will format all Python files within the src directory
 
     - name: Create Pull Request with formatted changes (optional)
+      if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-          commit_message: "Format Python code with Black"
-          branch: ${{ github.head_ref }} # Use the head branch for pull requests
-          push_options: "--force" # Use with caution, ensures changes are pushed
-          if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository # Only run on PRs from the same repo
+        commit_message: "chore: format Python code with Black"
+        branch: ${{ github.head_ref }}
+        push_options: "--force-with-lease"
