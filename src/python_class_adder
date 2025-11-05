@@ -1,0 +1,30 @@
+class ListAdder:
+    """
+    A class to handle operations involving lists of numbers.
+    """
+
+    def add_numbers(self, numbers: list) -> float:
+        """
+        Calculates the sum of all numbers in the provided list.
+
+        Args:
+            numbers: A list of integers or floats.
+
+        Returns:
+            The total sum of the numbers in the list.
+        """
+        return sum(numbers)
+
+# --- Example Usage ---
+# 1. Create an instance of the class
+adder = ListAdder()
+
+# 2. Define a list of numbers
+my_list = [10, 20.5, 30, 4.5]
+
+# 3. Call the method to add the numbers
+total = adder.add_numbers(my_list)
+
+# 4. Print the result
+print(f"The list of numbers is: {my_list}")
+print(f"The sum is: {total}")
