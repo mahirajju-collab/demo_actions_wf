@@ -17,9 +17,6 @@ jobs:
       with:
         python-version: '3.9' # Specify your desired Python version
 
-    #- name: Install dependencies
-     # run: pip install -r requirements.txt # If you have a requirements.txt file
-
     - name: Print Hello World
       run: echo "Hello World from GitHub Actions!" 
       
@@ -37,9 +34,6 @@ jobs:
     #- name: Run Python script
      # run: python your_script.py # Replace 'your_script.py' with your actual script name
 
-    #- name: Run Python tests (optional)
-    # run: pytest # If you use pytest for testing
-
     - name: Install Black
       run: pip install black
 
@@ -53,3 +47,42 @@ jobs:
         commit_message: "chore: format Python code with Black"
         branch: ${{ github.head_ref }}
         push_options: "--force-with-lease"
+
+    - name: Install AI SDK
+      run: pip install openai # or your chosen AI provider's SDK
+
+    - name: Identify committer and get diff
+      id: get_info
+      run: |
+        # Get the username of the last committer
+        COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
+        echo "::set-output name=author::$COMMIT_AUTHOR"
+
+        # Get the changes for the last commit/PR
+        # Adjust the git diff command to only target the relevant files/diffs
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          CHANGES=$(git diff origin/${{ github.base_ref }}...HEAD -- . ':(exclude)*.yml' ':(exclude)*.md')
+        else
+          CHANGES=$(git show ${{ github.sha }} -- . ':(exclude)*.yml' ':(exclude)*.md')
+        fi
+        # Save changes to a file for the Python script to use
+        echo "$CHANGES" > changes.diff
+
+    - name: Use AI to generate summary and prepend to files
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        COMMIT_AUTHOR: ${{ steps.get_info.outputs.author }}
+      run: python ./document_script.py
+
+    - name: Create Pull Request with documentation updates
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: 'docs: automated file header documentation [skip ci]'
+        title: 'Automated documentation updates'
+        body: 'This PR contains automatically generated file header documentation based on recent code changes by @${{ steps.get_info.outputs.author }}.'
+        branch: 'automated-doc-updates'
+        base: 'main'
+
+
+
+
