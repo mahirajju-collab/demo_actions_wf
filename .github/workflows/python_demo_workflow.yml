@@ -72,7 +72,7 @@ jobs:
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         COMMIT_AUTHOR: ${{ steps.get_info.outputs.author }}
-      run: python ./document_script.py
+      run: python ./.github/workflows/document_script.py
 
     - name: Create Pull Request with documentation updates
       uses: peter-evans/create-pull-request@v5
