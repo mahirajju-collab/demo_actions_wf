@@ -20,36 +20,7 @@ jobs:
     #- name: Install dependencies
      # run: pip install -r requirements.txt # If you have a requirements.txt file
 
-    - name: Print Hello World
-      run: echo "Hello World from GitHub Actions!" 
+    - name: Print Demo Github Action
+      run: echo "Simple Demo of GitHub Actions!" 
       
-    #Install the python package Black and runs the python formatter on the files
-    - name: Install Black
-      run: pip install black
-    - name: Run Black formatter
-      run: black src/*.py
-    - name: Commit changes
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "Format Python code with Black"
-        branch: ${{ github.head_ref || github.ref_name }}
-
-    #- name: Run Python script
-     # run: python your_script.py # Replace 'your_script.py' with your actual script name
-
-    #- name: Run Python tests (optional)
-    # run: pytest # If you use pytest for testing
-
-    - name: Install Black
-      run: pip install black
-
-    - name: Run Black on src directory
-      run: black src/ # This will format all Python files within the src directory
-
-    - name: Create Pull Request with formatted changes (optional)
-      if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: "chore: format Python code with Black"
-        branch: ${{ github.head_ref }}
-        push_options: "--force-with-lease"
+    
